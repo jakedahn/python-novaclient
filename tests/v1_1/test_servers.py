@@ -163,6 +163,18 @@ class ServersTest(utils.TestCase):
         cs.servers.remove_fixed_ip(s, '10.0.0.1')
         cs.assert_called('POST', '/servers/1234/action')
 
+        def test_add_floating_ip(self):
+            s = cs.servers.get(1234)
+            s.add_floating_ip('11.0.0.1')
+            cs.assert_called('POST', '/servers/1234/action')
+            cs.servers.add_floating_ip(s, '11.0.0.1')
+            cs.assert_called('POST', '/servers/1234/action')
+            f = cs.floating_ips.list()[0]
+            cs.servers.add_floating_ip(s, f)
+            cs.assert_called('POST', '/servers/1234/action')
+            s.add_floating_ip(f)
+            cs.assert_called('POST', '/servers/1234/action')
+
     def test_add_floating_ip(self):
         s = cs.servers.get(1234)
         s.add_floating_ip('11.0.0.1')
@@ -199,4 +211,20 @@ class ServersTest(utils.TestCase):
         s.unrescue()
         cs.assert_called('POST', '/servers/1234/action')
         cs.servers.unrescue(s)
+        cs.assert_called('POST', '/servers/1234/action')
+
+    def test_get_console_output_without_length(self):
+        s = cs.servers.get(1234)
+        s.get_console_output()
+        cs.assert_called('POST', '/servers/1234/action')
+
+        cs.servers.get_console_output(s)
+        cs.assert_called('POST', '/servers/1234/action')
+
+    def test_get_console_output_with_length(self):
+        s = cs.servers.get(1234)
+        s.get_console_output(length=50)
+        cs.assert_called('POST', '/servers/1234/action')
+        
+        cs.servers.get_console_output(s, length=50)
         cs.assert_called('POST', '/servers/1234/action')
