@@ -1,4 +1,5 @@
 from novaclient import client
+from novaclient.v1_1 import certs
 from novaclient.v1_1 import flavors
 from novaclient.v1_1 import floating_ip_dns
 from novaclient.v1_1 import floating_ips
@@ -47,6 +48,7 @@ class Client(object):
         self.servers = servers.ServerManager(self)
 
         # extensions
+        self.certs = certs.CertificateManager(self)
         self.floating_ips = floating_ips.FloatingIPManager(self)
         self.floating_ip_dns = floating_ip_dns.FloatingIPDNSManager(self)
         self.floating_ip_pools = floating_ip_pools.FloatingIPPoolManager(self)
